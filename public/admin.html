@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Admin Panel</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+    .message-card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-left: 4px solid #3498db;
+    }
+    .message-card.unread {
+      border-left-color: #e74c3c;
+      background: #fff9f9;
+    }
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .message-meta {
+      font-size: 0.9em;
+      color: #7f8c8d;
+    }
+    .message-content {
+      margin-top: 15px;
+      white-space: pre-wrap;
+    }
+    .mark-read-btn {
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8em;
+    }
+    .mark-read-btn:hover {
+      background: #229954;
+    }
+    .no-messages {
+      text-align: center;
+      padding: 50px;
+      color: #7f8c8d;
+    }
+    .login-form {
+      max-width: 400px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .login-form h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .login-btn:hover {
+      background: #2980b9;
+    }
+    .error {
+      color: #e74c3c;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .logout-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .logout-btn:hover {
+      background: #c0392b;
+    }
+  </style>
+</head>
+<body>
+  <div id="login-section" class="container">
+    <form id="login-form" class="login-form">
+      <h2>Admin Login</h2>
+      <div class="form-group">
+        <label for="token">Admin Token</label>
+        <input type="password" id="token" required>
+      </div>
+      <button type="submit" class="login-btn">Login</button>
+      <div id="error" class="error"></div>
+    </form>
+  </div>
+
+  <div id="admin-section" class="container" style="display: none;">
+    <button id="logout-btn" class="logout-btn">Logout</button>
+    <h1>Contact Messages</h1>
+    <div id="messages-container"></div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3001/api';
+    let authToken = localStorage.getItem('adminToken');
+
+    const loginSection = document.getElementById('login-section');
+    const adminSection = document.getElementById('admin-section');
+    const loginForm = document.getElementById('login-form');
+    const logoutBtn = document.getElementById('logout-btn');
+    const messagesContainer = document.getElementById('messages-container');
+    const errorDiv = document.getElementById('error');
+
+    // Check if already logged in
+    if (authToken) {
+      showAdminPanel();
+      loadMessages();
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const token = document.getElementById('token').value;
+
+      try {
+        const response = await fetch(`${API_BASE}/messages`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          authToken = token;
+          localStorage.setItem('adminToken', token);
+          showAdminPanel();
+          loadMessages();
+        } else {
+          errorDiv.textContent = 'Invalid token';
+        }
+      } catch (error) {
+        errorDiv.textContent = 'Login failed. Make sure the server is running.';
+      }
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('adminToken');
+      authToken = null;
+      showLoginForm();
+    });
+
+    function showAdminPanel() {
+      loginSection.style.display = 'none';
+      adminSection.style.display = 'block';
+    }
+
+    function showLoginForm() {
+      adminSection.style.display = 'none';
+      loginSection.style.display = 'block';
+      errorDiv.textContent = '';
+    }
+
+    async function loadMessages() {
+      try {
+        const response = await fetch(`${API_BASE}/messages`, {
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+          }
+        });
+
+        if (response.ok) {
+          const messages = await response.json();
+          displayMessages(messages);
+        } else {
+          alert('Failed to load messages');
+        }
+      } catch (error) {
+        alert('Error loading messages. Make sure the server is running.');
+      }
+    }
+
+    function displayMessages(messages) {
+      if (messages.length === 0) {
+        messagesContainer.innerHTML = '<div class="no-messages">No messages yet.</div>';
+        return;
+      }
+
+      messagesContainer.innerHTML = messages.map(msg => `
+        <div class="message-card ${msg.read ? '' : 'unread'}">
+          <div class="message-header">
+            <div>
+              <strong>${msg.name}</strong> &lt;${msg.email}&gt;
+              <div class="message-meta">${new Date(msg.timestamp).toLocaleString()}</div>
+            </div>
+            ${!msg.read ? `<button class="mark-read-btn" onclick="markAsRead(${msg.id})">Mark as Read</button>` : ''}
+          </div>
+          <div><strong>Subject:</strong> ${msg.subject}</div>
+          <div class="message-content">${msg.message}</div>
+        </div>
+      `).join('');
+    }
+
+    async function markAsRead(messageId) {
+      try {
+        const response = await fetch(`${API_BASE}/messages/${messageId}/read`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+          }
+        });
+
+        if (response.ok) {
+          loadMessages(); // Reload messages
+        }
+      } catch (error) {
+        alert('Error marking message as read');
+      }
+    }
+  </script>
+</body>
+</html>

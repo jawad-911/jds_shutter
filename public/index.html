@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mohammed Jawaduddin — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── Reset & Variables ─────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:        #0a0a0a;
+      --bg2:       #111111;
+      --surface:   #161616;
+      --border:    rgba(255,255,255,0.07);
+      --text:      #e8e2d9;
+      --muted:     #6b6560;
+      --accent:    #c8a97e;
+      --accent2:   #8b6f4e;
+      --white:     #f5f0eb;
+      --ff-serif:  'Cormorant Garamond', Georgia, serif;
+      --ff-mono:   'DM Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--ff-serif);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── Custom Cursor ─────────────────────────────────── */
+    .cursor {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(200,169,126,0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.12s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+    }
+    body:hover .cursor { opacity: 1; }
+
+    /* ── Noise Overlay ─────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.4;
+    }
+
+    /* ── Navigation ────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 60px;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+      transition: padding 0.4s ease;
+    }
+    nav.scrolled {
+      padding: 18px 60px;
+      background: rgba(10,10,10,0.97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: var(--ff-serif);
+      font-size: 1.1rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links { display: flex; gap: 44px; list-style: none; }
+    .nav-links a {
+      font-family: var(--ff-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.3s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.35s ease;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ── Hero ──────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 60px 100px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 70% at 70% 40%, rgba(139,111,78,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 50% at 20% 80%, rgba(200,169,126,0.06) 0%, transparent 60%),
+        linear-gradient(160deg, #0a0a0a 0%, #0f0d0b 50%, #0a0908 100%);
+    }
+
+    .hero-lines {
+      position: absolute;
+      right: 60px; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--border) 20%, var(--border) 80%, transparent);
+    }
+    .hero-lines::before {
+      content: '';
+      position: absolute;
+      right: -40px; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.03) 30%, rgba(255,255,255,0.03) 70%, transparent);
+    }
+
+    .hero-eyebrow {
+      font-family: var(--ff-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.3s forwards;
+    }
+
+    .hero-name {
+      font-size: clamp(3.5rem, 8vw, 8rem);
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.5s forwards;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-surname {
+      font-size: clamp(3.5rem, 8vw, 8rem);
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.65s forwards;
+    }
+
+    .hero-desc {
+      max-width: 460px;
+      font-size: 1.1rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--muted);
+      margin-bottom: 56px;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.85s forwards;
+    }
+    .hero-desc strong { color: var(--text); font-weight: 400; }
+
+    .hero-cta {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.05s forwards;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 14px 40px;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: var(--ff-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--white); transform: translateY(-2px); }
+
+    .btn-ghost {
+      display: inline-block;
+      padding: 14px 40px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--ff-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: border-color 0.3s, color 0.3s, transform 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 48px; right: 60px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--ff-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeIn 1s ease 1.5s forwards;
+      writing-mode: vertical-rl;
+    }
+    .hero-scroll::before {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%, 100% { transform: scaleY(1); opacity: 1; }
+      50% { transform: scaleY(0.5); opacity: 0.4; }
+    }
+
+    /* ── Section Common ────────────────────────────────── */
+    section { position: relative; }
+
+    .section-label {
+      font-family: var(--ff-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .section-label::before {
+      content: '— ';
+    }
+
+    /* ── About ─────────────────────────────────────────── */
+    #about {
+      padding: 140px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 120px;
+      align-items: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .about-left { }
+
+    .about-heading {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 36px;
+    }
+    .about-heading em { font-style: italic; color: var(--accent); }
+
+    .about-text {
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.9;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .about-text strong { color: var(--text); font-weight: 400; }
+
+    .about-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 40px;
+    }
+    .tag {
+      padding: 6px 18px;
+      border: 1px solid var(--border);
+      font-family: var(--ff-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .tag:hover { border-color: var(--accent); color: var(--accent); }
+
+    .about-right {
+      position: relative;
+    }
+
+    .about-image-frame {
+      position: relative;
+      aspect-ratio: 3/4;
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .about-image-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(200,169,126,0.08) 0%, transparent 60%);
+      z-index: 1;
+    }
+
+    .about-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      background: linear-gradient(160deg, #161410 0%, #0e0c0a 100%);
+    }
+    .about-placeholder svg {
+      width: 64px; height: 64px;
+      opacity: 0.2;
+      color: var(--accent);
+    }
+    .about-placeholder span {
+      font-family: var(--ff-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.5;
+    }
+
+    .about-frame-deco {
+      position: absolute;
+      bottom: -20px; right: -20px;
+      width: 80%; height: 80%;
+      border: 1px solid var(--border);
+      z-index: -1;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      margin-top: 32px;
+    }
+    .stat {
+      background: var(--bg);
+      padding: 28px 24px;
+    }
+    .stat-num {
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-label {
+      font-family: var(--ff-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── Gallery ───────────────────────────────────────── */
+    #gallery {
+      padding: 140px 60px;
+      border-top: 1px solid var(--border);
+    }
+
+    .gallery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 72px;
+    }
+
+    .gallery-heading {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+    }
+    .gallery-heading em { font-style: italic; color: var(--accent); }
+
+    .gallery-note {
+      font-family: var(--ff-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      max-width: 220px;
+      text-align: right;
+      line-height: 1.7;
+    }
+
+    .gallery-filter {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 48px;
+    }
+    .filter-btn {
+      padding: 8px 22px;
+      background: none;
+      border: 1px solid transparent;
+      font-family: var(--ff-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: none;
+      transition: all 0.25s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 240px;
+      gap: 6px;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      background: var(--surface);
+      cursor: none;
+    }
+    .gallery-item:nth-child(1) { grid-column: span 5; grid-row: span 2; }
+    .gallery-item:nth-child(2) { grid-column: span 4; grid-row: span 1; }
+    .gallery-item:nth-child(3) { grid-column: span 3; grid-row: span 1; }
+    .gallery-item:nth-child(4) { grid-column: span 4; grid-row: span 1; }
+    .gallery-item:nth-child(5) { grid-column: span 3; grid-row: span 2; }
+    .gallery-item:nth-child(6) { grid-column: span 4; grid-row: span 1; }
+    .gallery-item:nth-child(7) { grid-column: span 5; grid-row: span 1; }
+    .gallery-item:nth-child(8) { grid-column: span 4; grid-row: span 1; }
+
+    .gallery-img-placeholder {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--ff-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.4;
+      background: linear-gradient(135deg, #111 0%, #0d0d0d 100%);
+      transition: opacity 0.4s;
+      position: relative;
+    }
+
+    /* Different subtle tones for placeholder cells */
+    .gallery-item:nth-child(1) .gallery-img-placeholder { background: linear-gradient(160deg, #141210 0%, #0c0b0a 100%); opacity: 0.7; }
+    .gallery-item:nth-child(2) .gallery-img-placeholder { background: linear-gradient(200deg, #131210 0%, #0e0d0b 100%); }
+    .gallery-item:nth-child(3) .gallery-img-placeholder { background: linear-gradient(120deg, #121110 0%, #0d0c0b 100%); }
+    .gallery-item:nth-child(4) .gallery-img-placeholder { background: linear-gradient(180deg, #141311 0%, #0f0e0c 100%); }
+    .gallery-item:nth-child(5) .gallery-img-placeholder { background: linear-gradient(150deg, #131210 0%, #0e0d0b 100%); }
+    .gallery-item:nth-child(6) .gallery-img-placeholder { background: linear-gradient(170deg, #121110 0%, #0d0c0a 100%); }
+    .gallery-item:nth-child(7) .gallery-img-placeholder { background: linear-gradient(140deg, #141210 0%, #0f0d0b 100%); }
+    .gallery-item:nth-child(8) .gallery-img-placeholder { background: linear-gradient(190deg, #131211 0%, #0e0c0b 100%); }
+
+    .gallery-item:hover .gallery-img-placeholder { opacity: 1; }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+    .gallery-overlay-content {
+      transform: translateY(12px);
+      transition: transform 0.4s ease;
+    }
+    .gallery-item:hover .gallery-overlay-content { transform: translateY(0); }
+
+    .gallery-overlay-title {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .gallery-overlay-cat {
+      font-family: var(--ff-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .gallery-add-note {
+      margin-top: 48px;
+      text-align: center;
+      font-family: var(--ff-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .gallery-add-note span { color: var(--accent); }
+
+    /* ── Contact ───────────────────────────────────────── */
+    #contact {
+      padding: 140px 60px;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: start;
+    }
+
+    .contact-left { }
+
+    .contact-heading {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 28px;
+    }
+    .contact-heading em { font-style: italic; color: var(--accent); }
+
+    .contact-text {
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.9;
+      color: var(--muted);
+      margin-bottom: 48px;
+    }
+
+    .contact-info { display: flex; flex-direction: column; gap: 20px; }
+    .contact-line {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .contact-line-label {
+      font-family: var(--ff-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      min-width: 80px;
+    }
+    .contact-line-value {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--text);
+    }
+    .contact-line-value a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .contact-line-value a:hover { color: var(--accent); }
+
+    /* Contact Form */
+    .contact-form { display: flex; flex-direction: column; gap: 24px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 10px; }
+
+    .form-label {
+      font-family: var(--ff-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .form-input, .form-textarea {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--ff-serif);
+      font-size: 1rem;
+      font-weight: 300;
+      padding: 14px 18px;
+      outline: none;
+      transition: border-color 0.3s;
+      resize: none;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--muted); opacity: 0.5; }
+    .form-textarea { min-height: 140px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 44px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: var(--ff-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: none;
+      transition: background 0.3s, color 0.3s, transform 0.2s;
+      align-self: flex-start;
+    }
+    .btn-submit:hover { background: var(--accent); color: var(--bg); transform: translateY(-2px); }
+    .btn-submit svg { width: 14px; height: 14px; transition: transform 0.3s; }
+    .btn-submit:hover svg { transform: translateX(4px); }
+
+    /* ── Footer ────────────────────────────────────────── */
+    footer {
+      padding: 48px 60px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-copy {
+      font-family: var(--ff-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .footer-copy span { color: var(--accent); }
+
+    .footer-socials { display: flex; gap: 28px; }
+    .footer-socials a {
+      font-family: var(--ff-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-socials a:hover { color: var(--accent); }
+
+    /* ── Animations ────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 24px 28px; }
+      nav.scrolled { padding: 16px 28px; }
+      .nav-links { gap: 24px; }
+
+      #hero { padding: 0 28px 80px; }
+      .hero-scroll { right: 28px; }
+      .hero-lines { display: none; }
+
+      #about { grid-template-columns: 1fr; gap: 60px; padding: 80px 28px; }
+      .about-right { order: -1; }
+
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: 200px;
+      }
+      .gallery-item { grid-column: span 1 !important; grid-row: span 1 !important; }
+      #gallery { padding: 80px 28px; }
+
+      #contact { grid-template-columns: 1fr; gap: 60px; padding: 80px 28px; }
+      .form-row { grid-template-columns: 1fr; }
+
+      footer { flex-direction: column; gap: 20px; text-align: center; padding: 32px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Navigation -->
+  <nav id="nav">
+    <a href="#hero" class="nav-logo">M<span>.</span>Jawad</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ──────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-lines"></div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">ETE — CUET &nbsp;·&nbsp; Photographer</p>
+      <h1 class="hero-name">Mohammed</h1>
+      <h1 class="hero-surname"><em>Jawaduddin</em></h1>
+      <p class="hero-desc">
+        Engineering student by day, <strong>visual storyteller</strong> by soul.
+        I chase light, texture, and the quiet moments most people walk past.
+      </p>
+      <div class="hero-cta">
+        <a href="#gallery" class="btn-primary">View Gallery</a>
+        <a href="#contact" class="btn-ghost">Get in Touch</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <!-- ── ABOUT ─────────────────────────────────────── -->
+  <section id="about">
+    <div class="about-left reveal">
+      <p class="section-label">About Me</p>
+      <h2 class="about-heading">Engineer<br>with an <em>Artist's Eye</em></h2>
+      <p class="about-text">
+        I'm a final-year <strong>Electronics & Telecommunication Engineering</strong> student at
+        Chittagong University of Engineering & Technology (CUET), navigating a world of
+        signals, circuits, and frequencies.
+      </p>
+      <p class="about-text">
+        Outside the lab, I'm a photographer drawn to the raw beauty of everyday life —
+        <strong>street scenes, portraits, landscapes, and the golden hour</strong> light
+        that transforms the ordinary into something worth remembering.
+      </p>
+      <p class="about-text">
+        My camera is my way of slowing down and paying attention.
+      </p>
+      <div class="about-tags">
+        <span class="tag">Street Photography</span>
+        <span class="tag">Portraits</span>
+        <span class="tag">Landscape</span>
+        <span class="tag">Golden Hour</span>
+        <span class="tag">ETE — CUET</span>
+        <span class="tag">Chittagong</span>
+      </div>
+    </div>
+
+    <div class="about-right reveal" style="transition-delay:0.2s">
+      <div class="about-image-frame">
+        <div class="about-placeholder">
+          <!-- Replace this div with an <img src="your-photo.jpg"> tag -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="m21 15-5-5L5 21"/>
+          </svg>
+          <span>Add your photo here</span>
+        </div>
+      </div>
+      <div class="about-frame-deco"></div>
+
+      <div class="about-stats">
+        <div class="stat">
+          <div class="stat-num">3+</div>
+          <div class="stat-label">Years Shooting</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">ETE</div>
+          <div class="stat-label">CUET, BD</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Stories to Tell</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">CTG</div>
+          <div class="stat-label">Based In</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GALLERY ────────────────────────────────────── -->
+  <section id="gallery">
+    <div class="gallery-header reveal">
+      <div>
+        <p class="section-label">Photography</p>
+        <h2 class="gallery-heading">Selected<br><em>Works</em></h2>
+      </div>
+      <p class="gallery-note">Replace the placeholders below with your actual photographs.</p>
+    </div>
+
+    <div class="gallery-filter reveal">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">Street</button>
+      <button class="filter-btn">Portraits</button>
+      <button class="filter-btn">Landscape</button>
+    </div>
+
+    <div class="gallery-grid reveal">
+      <!-- Each item: replace the div.gallery-img-placeholder with <img src="photo.jpg" style="width:100%;height:100%;object-fit:cover;"> -->
+      <div class="gallery-item">
+        <div class="gallery-img-placeholder">Photo 01</div>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-content">
+            <div class="gallery-overlay-title">City at Dusk</div>
+            <div class="gallery-overlay-cat">Street</div>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-img-placeholder">Photo 02</div>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-content">
+            <div class="gallery-overlay-title">The Quiet Hour</div>
+            <div class="gallery-overlay-cat">Landscape</div>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-img-placeholder">Photo 03</div>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-content">
+            <div class="gallery-overlay-title">Faces of Chittagong</div>
+            <div class="gallery-overlay-cat">Portraits</div>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-img-placeholder">Photo 04</div>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-content">
+            <div class="gallery-overlay-title">Morning Rush</div>
+            <div class="gallery-overlay-cat">Street</div>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-img-placeholder">Photo 05</div>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-content">
+            <div class="gallery-overlay-title">Karnaphuli</div>
+            <div class="gallery-overlay-cat">Landscape</div>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-img-placeholder">Photo 06</div>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-content">
+            <div class="gallery-overlay-title">Golden Light</div>
+            <div class="gallery-overlay-cat">Portraits</div>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-img-placeholder">Photo 07</div>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-content">
+            <div class="gallery-overlay-title">Port District</div>
+            <div class="gallery-overlay-cat">Street</div>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-img-placeholder">Photo 08</div>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-content">
+            <div class="gallery-overlay-title">After Rain</div>
+            <div class="gallery-overlay-cat">Landscape</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gallery-add-note reveal">
+      To add photos: replace each placeholder div with <span>&lt;img src="your-photo.jpg"&gt;</span>
+    </p>
+  </section>
+
+  <!-- ── CONTACT ────────────────────────────────────── -->
+  <section id="contact">
+    <div class="contact-left reveal">
+      <p class="section-label">Contact</p>
+      <h2 class="contact-heading">Let's<br><em>Connect</em></h2>
+      <p class="contact-text">
+        Whether it's a collaboration, a commission, or simply a conversation about
+        photography and engineering — I'd love to hear from you.
+      </p>
+
+      <div class="contact-info">
+        <div class="contact-line">
+          <span class="contact-line-label">Location</span>
+          <span class="contact-line-value">Chittagong, Bangladesh</span>
+        </div>
+        <div class="contact-line">
+          <span class="contact-line-label">Study</span>
+          <span class="contact-line-value">ETE Dept, CUET</span>
+        </div>
+        <div class="contact-line">
+          <span class="contact-line-label">Email</span>
+          <span class="contact-line-value"><a href="mailto:jdsshutter@gmail.com">jdsshutter@gmail.com</a></span>
+        </div>
+        <div class="contact-line">
+          <span class="contact-line-label">Instagram</span>
+          <span class="contact-line-value"><a href="https://instagram.com/jds_shutter" target="_blank">@jds_shutter</a></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-right reveal" style="transition-delay:0.2s">
+      <form class="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Name</label>
+            <input class="form-input" type="text" name="name" placeholder="Your name" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-input" type="email" name="email" placeholder="jdsshutter@gmail.com" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subject</label>
+          <input class="form-input" type="text" name="subject" placeholder="What's this about?" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" name="message" placeholder="Tell me more…" required></textarea>
+        </div>
+        <button class="btn-submit" type="submit">
+          Send Message
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────────────────── -->
+  <footer>
+    <p class="footer-copy">© 2025 <span>Mohammed Jawaduddin</span> — All rights reserved</p>
+    <div class="footer-socials">
+      <a href="https://instagram.com/jds_shutter" target="_blank">Instagram</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">GitHub</a>
+    </div>
+  </footer>
+
+  <!-- ── JavaScript ─────────────────────────────────── -->
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top  = my + 'px';
+    });
+
+    function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button, .gallery-item').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width  = '16px';
+        cursor.style.height = '16px';
+        ring.style.width    = '60px';
+        ring.style.height   = '60px';
+        ring.style.opacity  = '0.5';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width  = '8px';
+        cursor.style.height = '8px';
+        ring.style.width    = '36px';
+        ring.style.height   = '36px';
+        ring.style.opacity  = '1';
+      });
+    });
+
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Gallery filter (UI only — wire up when real images are added)
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Contact form submission
+    const contactForm = document.querySelector('.contact-form');
+    const submitBtn = document.querySelector('.btn-submit');
+    const originalBtnText = submitBtn.innerHTML;
+
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Get form data
+      const formData = new FormData(contactForm);
+      const data = {
+        name: formData.get('name') || document.querySelector('input[placeholder="Your name"]').value,
+        email: formData.get('email') || document.querySelector('input[placeholder="your@email.com"]').value,
+        subject: formData.get('subject') || document.querySelector('input[placeholder="What\'s this about?"]').value,
+        message: formData.get('message') || document.querySelector('textarea').value
+      };
+
+      // Basic validation
+      if (!data.name || !data.email || !data.subject || !data.message) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      // Show loading state
+      submitBtn.innerHTML = 'Sending...';
+      submitBtn.disabled = true;
+
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert('Message sent successfully!');
+          contactForm.reset();
+        } else {
+          alert(result.error || 'Failed to send message. Please try again.');
+        }
+      } catch (error) {
+        alert('Network error. Please check if the server is running and try again.');
+      } finally {
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
