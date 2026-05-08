@@ -20,16 +20,19 @@ A Node.js backend for Mohammed Jawaduddin's photography portfolio website.
 2. Configure environment variables:
    - Copy `.env` file and update with your actual values:
      ```
-     EMAIL_USER=your-email@gmail.com
-     EMAIL_PASS=your-app-password
+     SENDGRID_API_KEY=your-sendgrid-api-key
      ADMIN_TOKEN=your-secure-admin-token
      PORT=3001
      ```
 
-3. For Gmail, you'll need to:
-   - Enable 2-factor authentication
-   - Generate an App Password: https://support.google.com/accounts/answer/185833
-   - Use the App Password as EMAIL_PASS
+3. For email sending, we'll use SendGrid (easier than Gmail app passwords):
+   - Go to https://sendgrid.com
+   - Create a free account
+   - Verify your email (use jdsshutter@gmail.com)
+   - Go to Settings → API Keys
+   - Create a new API key with "Full Access" permissions
+   - Copy the API key and put it in `SENDGRID_API_KEY`
+   - The emails will be sent FROM your SendGrid verified email TO your email
 
 ## Running
 

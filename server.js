@@ -24,12 +24,14 @@ const limiter = rateLimit({
 });
 app.use('/api/contact', limiter);
 
-// Email transporter
+// Email transporter - using SendGrid (easier than Gmail app passwords)
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // or your email service
+  host: 'smtp.sendgrid.net',
+  port: 587,
+  secure: false, // true for 465, false for other ports
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    user: 'apikey', // SendGrid uses 'apikey' as username
+    pass: process.env.SENDGRID_API_KEY // Your SendGrid API key
   }
 });
 
@@ -62,8 +64,8 @@ app.post('/api/contact', [
   try {
     // Send email to yourself
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER, // Send to yourself
+      from: 'jdsshutter@gmail.com', // Must be verified in SendGrid
+      to: 'jdsshutter@gmail.com', // Send to yourself
       subject: `Portfolio Contact: ${subject}`,
       html: `
         <h3>New Contact Form Submission</h3>
