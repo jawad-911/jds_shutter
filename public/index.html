@@ -493,6 +493,13 @@
       position: relative;
     }
 
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
     /* Different subtle tones for placeholder cells */
     .gallery-item:nth-child(1) .gallery-img-placeholder { background: linear-gradient(160deg, #141210 0%, #0c0b0a 100%); opacity: 0.7; }
     .gallery-item:nth-child(2) .gallery-img-placeholder { background: linear-gradient(200deg, #131210 0%, #0e0d0b 100%); }
@@ -850,75 +857,74 @@
     </div>
 
     <div class="gallery-grid reveal">
-      <!-- Each item: replace the div.gallery-img-placeholder with <img src="photo.jpg" style="width:100%;height:100%;object-fit:cover;"> -->
       <div class="gallery-item">
-        <div class="gallery-img-placeholder">Photo 01</div>
+        <img src="images/Beach.jpg" alt="Beach at Sunset">
         <div class="gallery-overlay">
           <div class="gallery-overlay-content">
-            <div class="gallery-overlay-title">City at Dusk</div>
-            <div class="gallery-overlay-cat">Street</div>
-          </div>
-        </div>
-      </div>
-      <div class="gallery-item">
-        <div class="gallery-img-placeholder">Photo 02</div>
-        <div class="gallery-overlay">
-          <div class="gallery-overlay-content">
-            <div class="gallery-overlay-title">The Quiet Hour</div>
+            <div class="gallery-overlay-title">Beach at Sunset</div>
             <div class="gallery-overlay-cat">Landscape</div>
           </div>
         </div>
       </div>
       <div class="gallery-item">
-        <div class="gallery-img-placeholder">Photo 03</div>
+        <img src="images/Cloud.jpg" alt="Cloudscape">
         <div class="gallery-overlay">
           <div class="gallery-overlay-content">
-            <div class="gallery-overlay-title">Faces of Chittagong</div>
-            <div class="gallery-overlay-cat">Portraits</div>
-          </div>
-        </div>
-      </div>
-      <div class="gallery-item">
-        <div class="gallery-img-placeholder">Photo 04</div>
-        <div class="gallery-overlay">
-          <div class="gallery-overlay-content">
-            <div class="gallery-overlay-title">Morning Rush</div>
-            <div class="gallery-overlay-cat">Street</div>
-          </div>
-        </div>
-      </div>
-      <div class="gallery-item">
-        <div class="gallery-img-placeholder">Photo 05</div>
-        <div class="gallery-overlay">
-          <div class="gallery-overlay-content">
-            <div class="gallery-overlay-title">Karnaphuli</div>
+            <div class="gallery-overlay-title">Cloudscape</div>
             <div class="gallery-overlay-cat">Landscape</div>
           </div>
         </div>
       </div>
       <div class="gallery-item">
-        <div class="gallery-img-placeholder">Photo 06</div>
+        <img src="images/Cousin.jpg" alt="Portrait of a person">
         <div class="gallery-overlay">
           <div class="gallery-overlay-content">
-            <div class="gallery-overlay-title">Golden Light</div>
+            <div class="gallery-overlay-title">Portrait Moment</div>
             <div class="gallery-overlay-cat">Portraits</div>
           </div>
         </div>
       </div>
       <div class="gallery-item">
-        <div class="gallery-img-placeholder">Photo 07</div>
+        <img src="images/Hand.jpg" alt="Hand gesture portrait">
         <div class="gallery-overlay">
           <div class="gallery-overlay-content">
-            <div class="gallery-overlay-title">Port District</div>
+            <div class="gallery-overlay-title">Hands in Motion</div>
+            <div class="gallery-overlay-cat">Portraits</div>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/Reflection.jpg" alt="City reflection">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-content">
+            <div class="gallery-overlay-title">City Reflection</div>
             <div class="gallery-overlay-cat">Street</div>
           </div>
         </div>
       </div>
       <div class="gallery-item">
-        <div class="gallery-img-placeholder">Photo 08</div>
+        <img src="images/Rest.jpg" alt="Quiet rest scene">
         <div class="gallery-overlay">
           <div class="gallery-overlay-content">
-            <div class="gallery-overlay-title">After Rain</div>
+            <div class="gallery-overlay-title">Quiet Rest</div>
+            <div class="gallery-overlay-cat">Landscape</div>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/Cityscape.JPG" alt="Cityscape at golden hour">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-content">
+            <div class="gallery-overlay-title">Cityscape</div>
+            <div class="gallery-overlay-cat">Street</div>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/Patenga.jpg" alt="Patenga beach scene">
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-content">
+            <div class="gallery-overlay-title">Patenga Beach</div>
             <div class="gallery-overlay-cat">Landscape</div>
           </div>
         </div>
@@ -926,7 +932,7 @@
     </div>
 
     <p class="gallery-add-note reveal">
-      To add photos: replace each placeholder div with <span>&lt;img src="your-photo.jpg"&gt;</span>
+      Your eight uploaded images are now displayed in the gallery above.
     </p>
   </section>
 

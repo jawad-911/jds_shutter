@@ -20,19 +20,14 @@ A Node.js backend for Mohammed Jawaduddin's photography portfolio website.
 2. Configure environment variables:
    - Copy `.env` file and update with your actual values:
      ```
-     SENDGRID_API_KEY=your-sendgrid-api-key
      ADMIN_TOKEN=your-secure-admin-token
      PORT=3001
      ```
 
-3. For email sending, we'll use SendGrid (easier than Gmail app passwords):
-   - Go to https://sendgrid.com
-   - Create a free account
-   - Verify your email (use jdsshutter@gmail.com)
-   - Go to Settings → API Keys
-   - Create a new API key with "Full Access" permissions
-   - Copy the API key and put it in `SENDGRID_API_KEY`
-   - The emails will be sent FROM your SendGrid verified email TO your email
+3. Email sending is currently disabled.
+   - Your contact form will still work.
+   - Messages will be stored and visible in the admin panel.
+   - You can add email sending later if you want.
 
 ## Running
 
